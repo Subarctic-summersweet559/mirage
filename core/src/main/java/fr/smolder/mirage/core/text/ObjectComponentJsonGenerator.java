@@ -42,11 +42,10 @@ public final class ObjectComponentJsonGenerator {
     // once the final 1.21.11 object component behavior is validated end-to-end.
     private static String objectComponent(SkinData skinData, boolean hat) {
         return """
-                {"type":"object","player":{"id":"%s","properties":[{"name":"textures","value":"%s","signature":"%s"}]},"hat":%s}
+                {"type":"object","player":{"id":"%s","properties":[{"name":"textures","value":"%s"}]},"hat":%s}
                 """.formatted(
                 EMPTY_PROFILE_ID,
                 escape(skinData.textureBase64()),
-                escape(skinData.signature()),
                 hat
         ).trim();
     }

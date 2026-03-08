@@ -56,11 +56,7 @@ public final class MinestomMotdController implements MotdController {
 
     private Component toPlayerHead(RenderedSkin renderedSkin) {
         var skinData = renderedSkin.skinData();
-        GameProfile.Property property = new GameProfile.Property(
-                "textures",
-                skinData.textureBase64(),
-                skinData.signature()
-        );
+        GameProfile.Property property = new GameProfile.Property("textures", skinData.textureBase64());
         ResolvableProfile profile = new ResolvableProfile(new ResolvableProfile.Partial(
                 null,
                 EMPTY_PROFILE_ID,

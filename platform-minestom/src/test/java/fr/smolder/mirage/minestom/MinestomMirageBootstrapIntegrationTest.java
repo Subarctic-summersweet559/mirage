@@ -26,6 +26,7 @@ import java.nio.file.Path;
 import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @EnvTest
@@ -64,6 +65,7 @@ class MinestomMirageBootstrapIntegrationTest {
         assertTrue(modernPingResponse.contains("\"player\""), modernPingResponse);
         assertTrue(modernPingResponse.contains("\"properties\""), modernPingResponse);
         assertTrue(modernPingResponse.contains("\"hat\":false"), modernPingResponse);
+        assertFalse(modernPingResponse.contains("\"signature\""), modernPingResponse);
 
         bootstrap.close();
     }

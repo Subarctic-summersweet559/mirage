@@ -62,7 +62,7 @@ public final class RealMineskinClient implements MineskinClient, AutoCloseable {
                             ? response.getRateLimit().next().absolute()
                             : "unknown"
             );
-            return new SkinData(texture.value(), texture.signature());
+            return new SkinData(texture.value(), "");
         } catch (ExecutionException exception) {
             logger.error("Failed to upload tile {} to Mineskin.", tileHash, exception.getCause());
             throw new IOException("Failed to upload a tile to Mineskin.", exception.getCause());
