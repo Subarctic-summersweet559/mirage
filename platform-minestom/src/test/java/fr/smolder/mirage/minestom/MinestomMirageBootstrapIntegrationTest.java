@@ -1,9 +1,10 @@
 package fr.smolder.mirage.minestom;
 
 import fr.smolder.mirage.core.cache.SqliteSkinCache;
-import fr.smolder.mirage.core.image.TileHasher;
+import fr.smolder.mirage.core.image.SkinTileSlicer;
 import fr.smolder.mirage.core.model.MotdRender;
 import fr.smolder.mirage.core.model.SkinData;
+import fr.smolder.mirage.core.model.SlicedImage;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.server.ServerListPingEvent;
@@ -62,6 +63,7 @@ class MinestomMirageBootstrapIntegrationTest {
         String modernPingResponse = modernPing.getPingType().getPingResponse(modernPing.getStatus());
         assertTrue(modernPingResponse.contains("\"player\""), modernPingResponse);
         assertTrue(modernPingResponse.contains("\"properties\""), modernPingResponse);
+        assertTrue(modernPingResponse.contains("\"hat\":false"), modernPingResponse);
 
         bootstrap.close();
     }
@@ -134,7 +136,8 @@ class MinestomMirageBootstrapIntegrationTest {
 
     private void seedPersistentCache(Path imagePath, Path databasePath) throws Exception {
         BufferedImage image = ImageIO.read(imagePath.toFile());
-        String tileHash = TileHasher.hashTile(image, 0, 0, 8);
+        SlicedImage slicedImage = new SkinTileSlicer().slice(image);
+        String tileHash = slicedImage.tiles().get(0).tileHash();
 
         try (SqliteSkinCache cache = new SqliteSkinCache(databasePath)) {
             cache.put(tileHash, new SkinData("texture-value", "signature-value"));

@@ -1,12 +1,14 @@
 package fr.smolder.mirage.minestom;
 
 import fr.smolder.mirage.core.model.MotdRender;
-import fr.smolder.mirage.core.model.SkinData;
+import fr.smolder.mirage.core.model.RenderedSkin;
 import fr.smolder.mirage.core.port.MotdController;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.object.ObjectContents;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.color.AlphaColor;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.ResolvableProfile;
@@ -46,7 +48,8 @@ public final class MinestomMotdController implements MotdController {
         return MINI_MESSAGE.deserialize(render.fallbackText());
     }
 
-    private Component toPlayerHead(SkinData skinData) {
+    private Component toPlayerHead(RenderedSkin renderedSkin) {
+        var skinData = renderedSkin.skinData();
         GameProfile.Property property = new GameProfile.Property(
                 "textures",
                 skinData.textureBase64(),
@@ -61,7 +64,9 @@ public final class MinestomMotdController implements MotdController {
                 .id(EMPTY_PROFILE_ID)
                 .profileProperty(property)
                 .skin(profile)
-                .hat(true)
-                .build());
+                .hat(renderedSkin.hat())
+                .build())
+                .color(NamedTextColor.WHITE)
+                .shadowColor(new AlphaColor(255, 255, 255, 255));
     }
 }

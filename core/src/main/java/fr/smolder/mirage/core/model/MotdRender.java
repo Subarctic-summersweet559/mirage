@@ -8,14 +8,14 @@ public record MotdRender(
         String fallbackText,
         List<String> missingTileHashes,
         int columns,
-        List<SkinData> orderedSkins
+        List<RenderedSkin> orderedSkins
 ) {
     public MotdRender {
         missingTileHashes = List.copyOf(missingTileHashes);
         orderedSkins = List.copyOf(orderedSkins);
     }
 
-    public static MotdRender ready(String modernJson, String fallbackText, int columns, List<SkinData> orderedSkins) {
+    public static MotdRender ready(String modernJson, String fallbackText, int columns, List<RenderedSkin> orderedSkins) {
         return new MotdRender(RenderState.READY, modernJson, fallbackText, List.of(), columns, orderedSkins);
     }
 

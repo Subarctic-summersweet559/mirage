@@ -3,6 +3,7 @@ package fr.smolder.mirage.core.service;
 import fr.smolder.mirage.core.cache.SkinCache;
 import fr.smolder.mirage.core.image.ImageSlicer;
 import fr.smolder.mirage.core.model.MotdRender;
+import fr.smolder.mirage.core.model.RenderedSkin;
 import fr.smolder.mirage.core.model.SkinData;
 import fr.smolder.mirage.core.model.SlicedImage;
 import fr.smolder.mirage.core.model.TileSkin;
@@ -11,8 +12,10 @@ import fr.smolder.mirage.core.text.ObjectComponentJsonGenerator;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public final class MotdRenderService {
     private final ImageSlicer imageSlicer;
@@ -36,9 +39,10 @@ public final class MotdRenderService {
     public List<TileSkin> missingTiles(BufferedImage image) {
         SlicedImage slicedImage = imageSlicer.slice(image);
         List<TileSkin> missing = new ArrayList<>();
+        Set<String> seenHashes = new LinkedHashSet<>();
 
         for (TileSkin tile : slicedImage.tiles()) {
-            if (skinCache.get(tile.tileHash()).isEmpty()) {
+            if (seenHashes.add(tile.tileHash()) && skinCache.get(tile.tileHash()).isEmpty()) {
                 missing.add(tile);
             }
         }
@@ -53,7 +57,7 @@ public final class MotdRenderService {
     public MotdRender render(BufferedImage image, String fallbackText) {
         SlicedImage slicedImage = imageSlicer.slice(image);
         Map<String, SkinData> resolved = new LinkedHashMap<>();
-        List<String> missing = new ArrayList<>();
+        Set<String> missing = new LinkedHashSet<>();
 
         for (TileSkin tile : slicedImage.tiles()) {
             skinCache.get(tile.tileHash()).ifPresentOrElse(
@@ -63,12 +67,12 @@ public final class MotdRenderService {
         }
 
         if (!missing.isEmpty()) {
-            return MotdRender.loading("Loading...", missing);
+            return MotdRender.loading("Loading...", List.copyOf(missing));
         }
 
-        List<SkinData> orderedSkins = new ArrayList<>(slicedImage.tiles().size());
+        List<RenderedSkin> orderedSkins = new ArrayList<>(slicedImage.tiles().size());
         for (TileSkin tile : slicedImage.tiles()) {
-            orderedSkins.add(resolved.get(tile.tileHash()));
+            orderedSkins.add(new RenderedSkin(resolved.get(tile.tileHash()), tile.hat()));
         }
         return MotdRender.ready(
                 jsonGenerator.generate(slicedImage, resolved),

@@ -26,7 +26,7 @@ public final class ObjectComponentJsonGenerator {
                 throw new IllegalArgumentException("Missing skin data for tile hash " + tile.tileHash());
             }
 
-            builder.append(objectComponent(skinData));
+            builder.append(objectComponent(skinData, tile.hat()));
             index++;
 
             if (index % slicedImage.columns() == 0 && index < slicedImage.tiles().size()) {
@@ -40,13 +40,14 @@ public final class ObjectComponentJsonGenerator {
 
     // This mirrors the draft spec closely enough for initial wiring and can be refined
     // once the final 1.21.11 object component behavior is validated end-to-end.
-    private static String objectComponent(SkinData skinData) {
+    private static String objectComponent(SkinData skinData, boolean hat) {
         return """
-                {"type":"object","player":{"id":"%s","properties":[{"name":"textures","value":"%s","signature":"%s"}]},"hat":true}
+                {"type":"object","player":{"id":"%s","properties":[{"name":"textures","value":"%s","signature":"%s"}]},"hat":%s}
                 """.formatted(
                 EMPTY_PROFILE_ID,
                 escape(skinData.textureBase64()),
-                escape(skinData.signature())
+                escape(skinData.signature()),
+                hat
         ).trim();
     }
 
