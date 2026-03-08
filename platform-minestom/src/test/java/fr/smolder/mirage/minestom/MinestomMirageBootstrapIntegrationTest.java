@@ -57,9 +57,11 @@ class MinestomMirageBootstrapIntegrationTest {
         dispatchAsync(legacyPing);
         assertEquals(Component.text("Legacy fallback"), legacyPing.getStatus().description());
 
-        MotdRender modernRender = bootstrap.runtime().motd("default", 774);
-        assertTrue(modernRender.modernJson().contains("\"type\":\"object\""));
-        assertTrue(modernRender.modernJson().contains("\"minecraft:player\""));
+        ServerListPingEvent modernPing = new ServerListPingEvent(new StubConnection(774), ServerListPingType.MODERN_FULL_RGB);
+        dispatchAsync(modernPing);
+        String modernPingResponse = modernPing.getPingType().getPingResponse(modernPing.getStatus());
+        assertTrue(modernPingResponse.contains("\"player\""), modernPingResponse);
+        assertTrue(modernPingResponse.contains("\"properties\""), modernPingResponse);
 
         bootstrap.close();
     }

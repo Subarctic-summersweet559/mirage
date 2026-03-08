@@ -66,6 +66,15 @@ public final class MotdRenderService {
             return MotdRender.loading("Loading...", missing);
         }
 
-        return MotdRender.ready(jsonGenerator.generate(slicedImage, resolved), fallbackText);
+        List<SkinData> orderedSkins = new ArrayList<>(slicedImage.tiles().size());
+        for (TileSkin tile : slicedImage.tiles()) {
+            orderedSkins.add(resolved.get(tile.tileHash()));
+        }
+        return MotdRender.ready(
+                jsonGenerator.generate(slicedImage, resolved),
+                fallbackText,
+                slicedImage.columns(),
+                orderedSkins
+        );
     }
 }

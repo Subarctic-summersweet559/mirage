@@ -112,7 +112,7 @@ public final class MirageRuntime implements AutoCloseable {
                     protocolVersion,
                     config.settings().minimumModernProtocol()
             );
-            return MotdRender.ready("", fallbackText);
+            return MotdRender.ready("", fallbackText, 0, List.of());
         }
 
         MotdRender render = renders.get(key);
@@ -151,13 +151,13 @@ public final class MirageRuntime implements AutoCloseable {
                     motdEntry.targetImage(),
                     motdEntry.type()
             );
-            return MotdRender.ready("", motdEntry.fallbackText());
+            return MotdRender.ready("", motdEntry.fallbackText(), 0, List.of());
         }
 
         MirageConfig.ImageEntry imageEntry = config.images().get(motdEntry.targetImage());
         if (imageEntry == null) {
             platformAdapter.logger().warn("Mirage image '{}' is not defined.", motdEntry.targetImage());
-            return MotdRender.ready("", motdEntry.fallbackText());
+            return MotdRender.ready("", motdEntry.fallbackText(), 0, List.of());
         }
 
         Path imagePath = platformAdapter.dataDirectory().resolve(imageEntry.file());

@@ -39,10 +39,10 @@ public final class ObjectComponentJsonGenerator {
     }
 
     // This mirrors the draft spec closely enough for initial wiring and can be refined
-    // once the final 1.21.11 object component schema is validated end-to-end.
+    // once the final 1.21.11 object component behavior is validated end-to-end.
     private static String objectComponent(SkinData skinData) {
         return """
-                {"type":"object","id":"minecraft:player","properties":{"profile":{"id":"%s","properties":[{"name":"textures","value":"%s","signature":"%s"}]}}}
+                {"type":"object","player":{"id":"%s","properties":[{"name":"textures","value":"%s","signature":"%s"}]},"hat":true}
                 """.formatted(
                 EMPTY_PROFILE_ID,
                 escape(skinData.textureBase64()),
