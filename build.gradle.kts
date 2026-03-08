@@ -8,14 +8,13 @@ plugins {
     base
 }
 
-group = "fr.smolder"
-version = "0.1.0-SNAPSHOT"
-
 subprojects {
     apply(plugin = "java-library")
 
     group = rootProject.group
     version = rootProject.version
+    description = rootProject.description
+    apply(plugin = "smolder.publishing-conventions")
 
     extensions.configure<JavaPluginExtension> {
         toolchain.languageVersion.set(JavaLanguageVersion.of(21))
