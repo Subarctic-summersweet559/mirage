@@ -31,6 +31,8 @@ import java.util.concurrent.ConcurrentMap;
 
 public final class MirageRuntime implements AutoCloseable {
     private static final String DEFAULT_MOTD_KEY = "default";
+    private static final String CONFIG_FILE_NAME = "mirage-config.yml";
+    private static final String DEFAULT_CONFIG_RESOURCE = "/mirage/config.yml";
 
     private final PlatformAdapter platformAdapter;
     private final ConfigLoader configLoader = new ConfigLoader();
@@ -48,7 +50,7 @@ public final class MirageRuntime implements AutoCloseable {
     public synchronized void reload() {
         try {
             Path dataDirectory = platformAdapter.dataDirectory();
-            Path configPath = dataDirectory.resolve("config.yml");
+            Path configPath = resolveConfigPath(dataDirectory);
             Path cachePath = dataDirectory.resolve("mirage-cache.sqlite");
             Files.createDirectories(dataDirectory);
             ensureDefaultConfig(configPath);
@@ -251,12 +253,16 @@ public final class MirageRuntime implements AutoCloseable {
             return;
         }
 
-        try (InputStream stream = MirageRuntime.class.getResourceAsStream("/config.yml")) {
+        try (InputStream stream = MirageRuntime.class.getResourceAsStream(DEFAULT_CONFIG_RESOURCE)) {
             if (stream == null) {
-                throw new IOException("Default config.yml resource is missing from the classpath.");
+                throw new IOException("Default Mirage config resource is missing from the classpath.");
             }
             Files.copy(stream, configPath);
         }
+    }
+
+    private Path resolveConfigPath(Path dataDirectory) {
+        return dataDirectory.resolve(CONFIG_FILE_NAME);
     }
 
     private List<String> missingHashes(List<TileSkin> missingTiles) {

@@ -111,7 +111,7 @@ class MinestomMirageBootstrapIntegrationTest {
 
     private void writeConfigAndImage(Path dataDirectory) throws IOException {
         Files.createDirectories(dataDirectory);
-        Files.writeString(dataDirectory.resolve("config.yml"), """
+        Files.writeString(dataDirectory.resolve("mirage-config.yml"), """
                 settings:
                   mineskin_api_key: ""
                   database_type: "sqlite"

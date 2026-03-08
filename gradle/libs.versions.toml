@@ -1,7 +1,7 @@
 [versions]
 adventure = "4.26.1"
 caffeine = "3.2.2"
-configurate = "4.2.0"
+configurate = "3.7.2"
 gson = "2.13.2"
 junit = "5.12.2"
 minestom = "2026.03.03-1.21.11"
@@ -13,6 +13,7 @@ sqlite = "3.50.3.0"
 [libraries]
 adventure-text-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure" }
 caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version.ref = "caffeine" }
+configurate-core = { module = "org.spongepowered:configurate-core", version.ref = "configurate" }
 configurate-yaml = { module = "org.spongepowered:configurate-yaml", version.ref = "configurate" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }

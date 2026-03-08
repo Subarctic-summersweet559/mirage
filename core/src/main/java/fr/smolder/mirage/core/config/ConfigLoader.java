@@ -1,8 +1,7 @@
 package fr.smolder.mirage.core.config;
 
-import org.spongepowered.configurate.CommentedConfigurationNode;
-import org.spongepowered.configurate.loader.ConfigurationLoader;
-import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
+import ninja.leaping.configurate.ConfigurationNode;
+import ninja.leaping.configurate.yaml.YAMLConfigurationLoader;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,46 +17,46 @@ public final class ConfigLoader {
             return MirageConfig.defaults();
         }
 
-        ConfigurationLoader<CommentedConfigurationNode> loader = YamlConfigurationLoader.builder()
-                .path(path)
+        YAMLConfigurationLoader loader = YAMLConfigurationLoader.builder()
+                .setPath(path)
                 .build();
-        CommentedConfigurationNode root = loader.load();
+        ConfigurationNode root = loader.load();
 
-        CommentedConfigurationNode settingsNode = root.node("settings");
+        ConfigurationNode settingsNode = root.getNode("settings");
         MirageConfig.Settings settings = new MirageConfig.Settings(
-                settingsNode.node("mineskin_api_key").getString(""),
-                settingsNode.node("database_type").getString("sqlite"),
-                settingsNode.node("minimum_modern_protocol").getInt(769),
-                settingsNode.node("mineskin_skin_visibility").getString("unlisted")
+                settingsNode.getNode("mineskin_api_key").getString(""),
+                settingsNode.getNode("database_type").getString("sqlite"),
+                settingsNode.getNode("minimum_modern_protocol").getInt(769),
+                settingsNode.getNode("mineskin_skin_visibility").getString("unlisted")
         );
 
         Map<String, MirageConfig.ImageEntry> images = new LinkedHashMap<>();
-        for (var child : root.node("images").childrenMap().entrySet()) {
+        for (Map.Entry<Object, ? extends ConfigurationNode> child : root.getNode("images").getChildrenMap().entrySet()) {
             String key = String.valueOf(child.getKey());
-            CommentedConfigurationNode node = child.getValue();
+            ConfigurationNode node = child.getValue();
             List<MirageConfig.LineStyle> lineStyles = new ArrayList<>();
-            for (CommentedConfigurationNode styleNode : node.node("line_styles").childrenList()) {
+            for (ConfigurationNode styleNode : node.getNode("line_styles").getChildrenList()) {
                 lineStyles.add(new MirageConfig.LineStyle(
-                        styleNode.node("text_color").getString(),
-                        styleNode.node("shadow_color").getString()
+                        styleNode.getNode("text_color").getString(),
+                        styleNode.getNode("shadow_color").getString()
                 ));
             }
             images.put(key, new MirageConfig.ImageEntry(
-                    node.node("file").getString(""),
-                    node.node("text_color").getString("#FFFFFF"),
-                    node.node("shadow_color").getString("#FFFFFFFF"),
+                    node.getNode("file").getString(""),
+                    node.getNode("text_color").getString("#FFFFFF"),
+                    node.getNode("shadow_color").getString("#FFFFFFFF"),
                     lineStyles
             ));
         }
 
         Map<String, MirageConfig.MotdEntry> motds = new LinkedHashMap<>();
-        for (var child : root.node("motd").childrenMap().entrySet()) {
+        for (Map.Entry<Object, ? extends ConfigurationNode> child : root.getNode("motd").getChildrenMap().entrySet()) {
             String key = String.valueOf(child.getKey());
-            CommentedConfigurationNode node = child.getValue();
+            ConfigurationNode node = child.getValue();
             motds.put(key, new MirageConfig.MotdEntry(
-                    node.node("type").getString("image"),
-                    node.node("target_image").getString(""),
-                    node.node("fallback_text").getString("Loading...")
+                    node.getNode("type").getString("image"),
+                    node.getNode("target_image").getString(""),
+                    node.getNode("fallback_text").getString("Loading...")
             ));
         }
 

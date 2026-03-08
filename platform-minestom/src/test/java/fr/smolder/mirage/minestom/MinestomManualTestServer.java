@@ -44,7 +44,7 @@ public final class MinestomManualTestServer {
 
             event.getPlayer().setGameMode(GameMode.CREATIVE);
             event.getPlayer().sendMessage(Component.text("Mirage manual test server is running."));
-            event.getPlayer().sendMessage(Component.text("Edit config.yml/logo.png in the manual data directory, then run /mirage."));
+            event.getPlayer().sendMessage(Component.text("Edit mirage-config.yml/logo.png in the manual data directory, then run /mirage."));
         });
 
         MinestomMirageBootstrap bootstrap = new MinestomMirageBootstrap();
@@ -57,7 +57,7 @@ public final class MinestomManualTestServer {
 
         System.out.println("Mirage manual Minestom server starting on 0.0.0.0:25565");
         System.out.println("Data directory: " + dataDirectory);
-        System.out.println("Edit config.yml and assets there, then use /mirage to reload.");
+        System.out.println("Edit mirage-config.yml and assets there, then use /mirage to reload.");
 
         minecraftServer.start("0.0.0.0", 25565);
     }

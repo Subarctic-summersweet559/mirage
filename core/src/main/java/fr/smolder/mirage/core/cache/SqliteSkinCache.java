@@ -16,6 +16,8 @@ import java.sql.Statement;
 import java.util.Optional;
 
 public final class SqliteSkinCache implements SkinCache {
+    private static final String SQLITE_DRIVER_CLASS = "org.sqlite.JDBC";
+
     private final String jdbcUrl;
     private final Cache<String, SkinData> inMemory = Caffeine.newBuilder()
             .maximumSize(8_192)
@@ -24,6 +26,7 @@ public final class SqliteSkinCache implements SkinCache {
     public SqliteSkinCache(Path databasePath) throws IOException {
         Files.createDirectories(databasePath.toAbsolutePath().getParent());
         this.jdbcUrl = "jdbc:sqlite:" + databasePath.toAbsolutePath();
+        ensureDriverLoaded();
         initSchema();
     }
 
@@ -83,6 +86,17 @@ public final class SqliteSkinCache implements SkinCache {
 
     private Connection openConnection() throws SQLException {
         return DriverManager.getConnection(jdbcUrl);
+    }
+
+    private static void ensureDriverLoaded() {
+        try {
+            Class.forName(SQLITE_DRIVER_CLASS);
+        } catch (ClassNotFoundException exception) {
+            throw new IllegalStateException(
+                    "SQLite JDBC driver is not available. Ensure sqlite-jdbc is present on the runtime classpath.",
+                    exception
+            );
+        }
     }
 
     private void initSchema() {

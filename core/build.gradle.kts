@@ -1,6 +1,7 @@
 dependencies {
     api(libs.slf4j.api)
     implementation(libs.caffeine)
+    implementation(libs.configurate.core)
     implementation(libs.configurate.yaml)
     implementation(libs.gson)
     implementation(libs.mineskin.client)

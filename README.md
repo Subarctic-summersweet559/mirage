@@ -38,7 +38,7 @@ dependencies {
 
 ## Configuration
 
-Mirage loads `config.yml` from the platform data directory.
+Mirage loads `mirage-config.yml` from the platform data directory.
 
 Minimal example:
 

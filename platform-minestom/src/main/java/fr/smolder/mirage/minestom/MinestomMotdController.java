@@ -30,7 +30,7 @@ public final class MinestomMotdController implements MotdController {
             int protocolVersion = event.getConnection() != null ? event.getConnection().getProtocolVersion() : -1;
             MotdRender render = resolver.resolve(DEFAULT_MOTD_KEY, protocolVersion);
             Status updatedStatus = Status.builder(event.getStatus())
-                    .description(toComponent(render)).versionInfo(new Status.VersionInfo("§6◆ ɴᴇᴡ ɢᴀᴍᴇs!                                                            §70§8/§71000 §a✔", 0))
+                    .description(toComponent(render))
                     .build();
             event.setStatus(updatedStatus);
         });
