@@ -19,17 +19,17 @@ Dependencies:
 
 ```kotlin
 dependencies {
-    implementation("fr.smolder:core:0.0.1")
-    implementation("fr.smolder:platform-spigot:0.0.1")
-    implementation("fr.smolder:platform-minestom:0.0.1")
+    implementation("fr.smolder:mirage-core:0.0.1")
+    implementation("fr.smolder:mirage-platform-spigot:0.0.1")
+    implementation("fr.smolder:mirage-platform-minestom:0.0.1")
 }
 ```
 
 ## Modules
 
-- `core`: platform-agnostic image slicing, cache, config, MineSkin integration, and MOTD generation
-- `platform-spigot`: Paper adapter
-- `platform-minestom`: Minestom adapter and manual test server
+- `mirage-core`: platform-agnostic image slicing, cache, config, MineSkin integration, and MOTD generation
+- `mirage-platform-spigot`: Paper adapter
+- `mirage-platform-minestom`: Minestom adapter and manual test server
 
 ## Requirements
 
@@ -81,7 +81,7 @@ Run tests:
 Run the manual Minestom test server:
 
 ```powershell
-./gradlew :platform-minestom:runManualServer
+./gradlew :mirage-platform-minestom:runManualServer
 ```
 
 Publish locally:

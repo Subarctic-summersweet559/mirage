@@ -1,5 +1,5 @@
 dependencies {
-    implementation(project(":core"))
+    implementation(project(":mirage-core"))
     implementation(libs.adventure.text.minimessage)
     compileOnly(libs.paper.api)
 }

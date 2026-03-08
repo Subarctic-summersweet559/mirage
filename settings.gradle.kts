@@ -18,6 +18,10 @@ dependencyResolutionManagement {
 
 rootProject.name = "mirage"
 
-include("core")
-include("platform-spigot")
-include("platform-minestom")
+include("mirage-core")
+include("mirage-platform-spigot")
+include("mirage-platform-minestom")
+
+project(":mirage-core").projectDir = file("core")
+project(":mirage-platform-spigot").projectDir = file("platform-spigot")
+project(":mirage-platform-minestom").projectDir = file("platform-minestom")

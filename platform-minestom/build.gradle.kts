@@ -4,7 +4,7 @@ import org.gradle.api.tasks.JavaExec
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 
 dependencies {
-    implementation(project(":core"))
+    implementation(project(":mirage-core"))
     implementation(libs.adventure.text.minimessage)
     runtimeOnly(libs.slf4j.simple)
     compileOnly(libs.minestom)
