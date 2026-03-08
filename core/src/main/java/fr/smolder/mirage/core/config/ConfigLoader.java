@@ -7,7 +7,9 @@ import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public final class ConfigLoader {
@@ -33,10 +35,18 @@ public final class ConfigLoader {
         for (var child : root.node("images").childrenMap().entrySet()) {
             String key = String.valueOf(child.getKey());
             CommentedConfigurationNode node = child.getValue();
+            List<MirageConfig.LineStyle> lineStyles = new ArrayList<>();
+            for (CommentedConfigurationNode styleNode : node.node("line_styles").childrenList()) {
+                lineStyles.add(new MirageConfig.LineStyle(
+                        styleNode.node("text_color").getString(),
+                        styleNode.node("shadow_color").getString()
+                ));
+            }
             images.put(key, new MirageConfig.ImageEntry(
                     node.node("file").getString(""),
                     node.node("text_color").getString("#FFFFFF"),
-                    node.node("shadow_color").getString("#FFFFFFFF")
+                    node.node("shadow_color").getString("#FFFFFFFF"),
+                    lineStyles
             ));
         }
 

@@ -54,6 +54,7 @@ class MinestomMirageBootstrapIntegrationTest {
                 waitForModernReady(env, bootstrap, Duration.ofSeconds(5)),
                 "Mirage runtime did not finish preparing the modern MOTD in time."
         );
+        assertEquals("#FF0000FF", bootstrap.runtime().motd("default", 774).lineStyles().getFirst().shadowColor());
 
         ServerListPingEvent legacyPing = new ServerListPingEvent(ServerListPingType.MODERN_FULL_RGB);
         dispatchAsync(legacyPing);
@@ -65,6 +66,7 @@ class MinestomMirageBootstrapIntegrationTest {
         assertTrue(modernPingResponse.contains("\"player\""), modernPingResponse);
         assertTrue(modernPingResponse.contains("\"properties\""), modernPingResponse);
         assertTrue(modernPingResponse.contains("\"hat\":false"), modernPingResponse);
+        assertTrue(modernPingResponse.contains("\"shadow_color\""), modernPingResponse);
         assertFalse(modernPingResponse.contains("\"signature\""), modernPingResponse);
 
         bootstrap.close();
@@ -118,7 +120,10 @@ class MinestomMirageBootstrapIntegrationTest {
                 images:
                   server_logo:
                     file: "logo.png"
+                    text_color: "#FFFFFF"
                     shadow_color: "#00000000"
+                    line_styles:
+                      - shadow_color: "#FF0000FF"
 
                 motd:
                   default:

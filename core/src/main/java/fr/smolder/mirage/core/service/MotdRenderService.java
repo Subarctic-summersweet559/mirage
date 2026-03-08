@@ -54,7 +54,13 @@ public final class MotdRenderService {
         skinCache.put(tileHash, skinData);
     }
 
-    public MotdRender render(BufferedImage image, String fallbackText, String textColor, String shadowColor) {
+    public MotdRender render(
+            BufferedImage image,
+            String fallbackText,
+            String textColor,
+            String shadowColor,
+            List<MotdRender.LineStyle> lineStyleOverrides
+    ) {
         SlicedImage slicedImage = imageSlicer.slice(image);
         Map<String, SkinData> resolved = new LinkedHashMap<>();
         Set<String> missing = new LinkedHashSet<>();
@@ -67,20 +73,46 @@ public final class MotdRenderService {
         }
 
         if (!missing.isEmpty()) {
-            return MotdRender.loading("Loading...", List.copyOf(missing), textColor, shadowColor);
+            return MotdRender.loading("Loading...", List.copyOf(missing));
         }
 
+        List<MotdRender.LineStyle> resolvedLineStyles = resolveLineStyles(
+                slicedImage.rows(),
+                textColor,
+                shadowColor,
+                lineStyleOverrides
+        );
         List<RenderedSkin> orderedSkins = new ArrayList<>(slicedImage.tiles().size());
         for (TileSkin tile : slicedImage.tiles()) {
             orderedSkins.add(new RenderedSkin(resolved.get(tile.tileHash()), tile.hat()));
         }
         return MotdRender.ready(
-                jsonGenerator.generate(slicedImage, resolved),
+                jsonGenerator.generate(slicedImage, resolved, resolvedLineStyles),
                 fallbackText,
                 slicedImage.columns(),
                 orderedSkins,
-                textColor,
-                shadowColor
+                resolvedLineStyles
         );
+    }
+
+    private static List<MotdRender.LineStyle> resolveLineStyles(
+            int rows,
+            String defaultTextColor,
+            String defaultShadowColor,
+            List<MotdRender.LineStyle> lineStyleOverrides
+    ) {
+        List<MotdRender.LineStyle> resolved = new ArrayList<>(rows);
+        for (int row = 0; row < rows; row++) {
+            MotdRender.LineStyle override = row < lineStyleOverrides.size() ? lineStyleOverrides.get(row) : null;
+            resolved.add(new MotdRender.LineStyle(
+                    overrideColor(override != null ? override.textColor() : null, defaultTextColor),
+                    overrideColor(override != null ? override.shadowColor() : null, defaultShadowColor)
+            ));
+        }
+        return resolved;
+    }
+
+    private static String overrideColor(String override, String fallback) {
+        return override == null || override.isBlank() ? fallback : override;
     }
 }

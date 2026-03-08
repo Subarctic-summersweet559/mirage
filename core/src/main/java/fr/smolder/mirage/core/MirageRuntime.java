@@ -187,12 +187,7 @@ public final class MirageRuntime implements AutoCloseable {
                         imageEntry.file(),
                         summarizeTileHashes(missingTiles)
                 );
-                return MotdRender.loading(
-                        "Loading...",
-                        missingHashes(missingTiles),
-                        imageEntry.textColor(),
-                        imageEntry.shadowColor()
-                );
+                return MotdRender.loading("Loading...", missingHashes(missingTiles));
             }
 
             int index = 0;
@@ -219,7 +214,8 @@ public final class MirageRuntime implements AutoCloseable {
                 image,
                 motdEntry.fallbackText(),
                 imageEntry.textColor(),
-                imageEntry.shadowColor()
+                imageEntry.shadowColor(),
+                toLineStyles(imageEntry)
         );
         if (render.state() == MotdRender.RenderState.READY) {
             platformAdapter.logger().info(
@@ -311,5 +307,13 @@ public final class MirageRuntime implements AutoCloseable {
             return summary + " ... +" + (hashes.size() - limit) + " more";
         }
         return summary;
+    }
+
+    private List<MotdRender.LineStyle> toLineStyles(MirageConfig.ImageEntry imageEntry) {
+        List<MotdRender.LineStyle> styles = new ArrayList<>(imageEntry.lineStyles().size());
+        for (MirageConfig.LineStyle lineStyle : imageEntry.lineStyles()) {
+            styles.add(new MotdRender.LineStyle(lineStyle.textColor(), lineStyle.shadowColor()));
+        }
+        return styles;
     }
 }

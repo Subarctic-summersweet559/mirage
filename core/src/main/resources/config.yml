@@ -9,6 +9,9 @@ images:
     file: "logo.png"
     text_color: "#FFFFFF"
     shadow_color: "#FFFFFFFF"
+    # line_styles:
+    #   - shadow_color: "#FF0000FF" # line 1 override
+    #   - text_color: "#00FF00"     # line 2 override
 
 motd:
   default:

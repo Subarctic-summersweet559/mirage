@@ -41,14 +41,24 @@ class MotdRenderServiceTest {
         TileSkin tileSkin = service.slice(twoTileImage()).tiles().getFirst();
         skinCache.put(tileSkin.tileHash(), new SkinData("texture", "signature"));
 
-        MotdRender render = service.render(twoTileImage(), "Fallback", "#FFFFFF", "#FFFFFFFF");
+        MotdRender render = service.render(
+                twoTileImage(),
+                "Fallback",
+                "#FFFFFF",
+                "#FFFFFFFF",
+                List.of(new MotdRender.LineStyle(null, "#FF0000FF"))
+        );
 
         assertEquals(MotdRender.RenderState.READY, render.state());
         assertEquals(2, render.orderedSkins().size());
+        assertEquals(1, render.lineStyles().size());
         assertFalse(render.orderedSkins().get(0).hat());
         assertTrue(render.orderedSkins().get(1).hat());
+        assertEquals("#FFFFFF", render.lineStyles().getFirst().textColor());
+        assertEquals("#FF0000FF", render.lineStyles().getFirst().shadowColor());
         assertTrue(render.modernJson().contains("\"hat\":false"));
         assertTrue(render.modernJson().contains("\"hat\":true"));
+        assertTrue(render.modernJson().contains("\"shadow_color\":\"#FF0000FF\""));
         assertFalse(render.modernJson().contains("\"signature\""));
     }
 

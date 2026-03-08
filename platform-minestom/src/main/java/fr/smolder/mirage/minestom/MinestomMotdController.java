@@ -30,7 +30,7 @@ public final class MinestomMotdController implements MotdController {
             int protocolVersion = event.getConnection() != null ? event.getConnection().getProtocolVersion() : -1;
             MotdRender render = resolver.resolve(DEFAULT_MOTD_KEY, protocolVersion);
             Status updatedStatus = Status.builder(event.getStatus())
-                    .description(toComponent(render))
+                    .description(toComponent(render)).versionInfo(new Status.VersionInfo("§6◆ ɴᴇᴡ ɢᴀᴍᴇs!                                                            §70§8/§71000 §a✔", 0))
                     .build();
             event.setStatus(updatedStatus);
         });
@@ -38,18 +38,26 @@ public final class MinestomMotdController implements MotdController {
 
     private Component toComponent(MotdRender render) {
         if (render.state() == MotdRender.RenderState.READY && !render.orderedSkins().isEmpty()) {
-            TextColor textColor = parseTextColor(render.textColor());
-            AlphaColor shadowColor = parseShadowColor(render.shadowColor());
             Component result = Component.empty();
-            for (int index = 0; index < render.orderedSkins().size(); index++) {
-                result = result.append(toPlayerHead(render.orderedSkins().get(index)));
-                if ((index + 1) % render.columns() == 0 && index + 1 < render.orderedSkins().size()) {
+            int rows = (render.orderedSkins().size() + render.columns() - 1) / render.columns();
+            for (int row = 0; row < rows; row++) {
+                MotdRender.LineStyle lineStyle = row < render.lineStyles().size()
+                        ? render.lineStyles().get(row)
+                        : new MotdRender.LineStyle("#FFFFFF", "#FFFFFFFF");
+                Component line = Component.empty();
+                int start = row * render.columns();
+                int end = Math.min(start + render.columns(), render.orderedSkins().size());
+                for (int index = start; index < end; index++) {
+                    line = line.append(toPlayerHead(render.orderedSkins().get(index)));
+                }
+                result = result.append(line
+                        .color(parseTextColor(lineStyle.textColor()))
+                        .shadowColor(parseShadowColor(lineStyle.shadowColor())));
+                if (row + 1 < rows) {
                     result = result.append(Component.text("\n"));
                 }
             }
-            return result
-                    .color(textColor)
-                    .shadowColor(shadowColor);
+            return result;
         }
         return MINI_MESSAGE.deserialize(render.fallbackText());
     }
