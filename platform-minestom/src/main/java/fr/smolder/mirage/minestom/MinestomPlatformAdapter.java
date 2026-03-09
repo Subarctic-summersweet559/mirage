@@ -5,6 +5,7 @@ import fr.smolder.mirage.core.port.PlatformAdapter;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.timer.TaskSchedule;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
 import java.time.Duration;
@@ -15,6 +16,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public final class MinestomPlatformAdapter implements PlatformAdapter {
 	private final Path dataDirectory;
+	private final Logger logger = LoggerFactory.getLogger(MinestomPlatformAdapter.class);
 	private final ExecutorService asyncExecutor = Executors.newSingleThreadExecutor(daemonFactory("mirage-minestom-async"));
 	private final MirageScheduler scheduler = new MirageScheduler() {
 		@Override
@@ -37,7 +39,7 @@ public final class MinestomPlatformAdapter implements PlatformAdapter {
 
 	@Override
 	public Logger logger() {
-		return MinecraftServer.LOGGER;
+		return logger;
 	}
 
 	@Override

@@ -47,10 +47,10 @@ public final class RealMineskinClient implements MineskinClient, AutoCloseable {
 				.visibility(visibility)
 				.variant(Variant.AUTO);
 		try {
-			logger.info("Uploading tile {} to Mineskin with visibility {}.", tileHash, visibility.getName());
+			logger.debug("Uploading tile {} to Mineskin with visibility {}.", tileHash, visibility.getName());
 			GenerateResponse response = client.generate().submitAndWait(request).get();
 			ValueAndSignature texture = response.getSkin().texture().data();
-			logger.info(
+			logger.debug(
 					"Uploaded tile {} to Mineskin (duplicate={}, nextRequest={}).",
 					tileHash,
 					response.getSkin().duplicate(),
