@@ -32,7 +32,6 @@ public final class MinestomMirageBootstrap {
 				}
 		);
 
-		System.out.println("[Mirage] Scheduling initial reload.");
 		logger.debug("Scheduling initial Mirage reload.");
 		platformAdapter.scheduler().executeAsync(runtime::reload);
 		logger.debug("Mirage runtime installed for Minestom at {}", dataDirectory);

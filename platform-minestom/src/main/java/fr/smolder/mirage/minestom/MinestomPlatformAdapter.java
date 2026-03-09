@@ -59,11 +59,9 @@ public final class MinestomPlatformAdapter implements PlatformAdapter {
 	private Runnable wrap(Runnable task, String source) {
 		return () -> {
 			try {
-				System.out.println("[Mirage] Running " + source + " task.");
 				logger().info("Running Mirage {} task.", source);
 				task.run();
 			} catch (Throwable throwable) {
-				System.err.println("[Mirage] " + source + " task failed: " + throwable.getMessage());
 				throwable.printStackTrace(System.err);
 				logger().error("Mirage {} task failed.", source, throwable);
 			}
