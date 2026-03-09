@@ -15,7 +15,9 @@ import net.minestom.server.network.player.ResolvableProfile;
 import net.minestom.server.ping.Status;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 public final class MinestomMotdController implements MotdController {
 	private static final String DEFAULT_MOTD_KEY = "default";
@@ -23,6 +25,7 @@ public final class MinestomMotdController implements MotdController {
 	private static final UUID EMPTY_PROFILE_ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 	private static final int DEFAULT_TEXT_ARGB = 0xFFFFFFFF;
 	private static final int DEFAULT_SHADOW_ARGB = 0xFFFFFFFF;
+	private final AtomicReference<CachedComponent> componentCache = new AtomicReference<>();
 
 	@Override
 	public void install(MotdResolver resolver) {
@@ -37,6 +40,18 @@ public final class MinestomMotdController implements MotdController {
 	}
 
 	private Component toComponent(MotdRender render) {
+		RenderSignature signature = RenderSignature.from(render);
+		CachedComponent cached = componentCache.get();
+		if (cached != null && cached.signature().equals(signature)) {
+			return cached.component();
+		}
+
+		Component component = buildComponent(render);
+		componentCache.set(new CachedComponent(signature, component));
+		return component;
+	}
+
+	private Component buildComponent(MotdRender render) {
 		if (render.state() == MotdRender.RenderState.READY && !render.orderedSkins().isEmpty()) {
 			Component result = Component.empty();
 			int rows = (render.orderedSkins().size() + render.columns() - 1) / render.columns();
@@ -60,6 +75,36 @@ public final class MinestomMotdController implements MotdController {
 			return result;
 		}
 		return MINI_MESSAGE.deserialize(render.fallbackText());
+	}
+
+	private record CachedComponent(RenderSignature signature, Component component) {
+	}
+
+	private record RenderSignature(
+			MotdRender.RenderState state,
+			String fallbackText,
+			int columns,
+			List<RenderedSkin> orderedSkins,
+			List<MotdRender.LineStyle> lineStyles
+	) {
+		private static RenderSignature from(MotdRender render) {
+			if (render.state() == MotdRender.RenderState.READY && !render.orderedSkins().isEmpty()) {
+				return new RenderSignature(
+						render.state(),
+						"",
+						render.columns(),
+						render.orderedSkins(),
+						render.lineStyles()
+				);
+			}
+			return new RenderSignature(render.state(), render.fallbackText(), 0, List.of(), List.of());
+		}
+
+		RenderSignature {
+			fallbackText = Objects.requireNonNull(fallbackText, "fallbackText");
+			orderedSkins = List.copyOf(orderedSkins);
+			lineStyles = List.copyOf(lineStyles);
+		}
 	}
 
 	private Component toPlayerHead(RenderedSkin renderedSkin) {
