@@ -33,6 +33,7 @@ val smolderPassword = providers.gradleProperty("smolderPassword").orNull
 val repositoryName: String by project
 val snapshotRepository: String by project
 val releaseRepository: String by project
+val publicRepository = providers.gradleProperty("publicRepository").orNull
 
 publishing {
     repositories {
@@ -40,10 +41,10 @@ publishing {
             val snapshot = project.version.toString().endsWith("-SNAPSHOT")
 
             name = repositoryName
-            url = if (snapshot) {
-                uri(snapshotRepository)
-            } else {
-                uri(releaseRepository)
+            url = when {
+                !publicRepository.isNullOrBlank() -> uri(publicRepository)
+                snapshot -> uri(snapshotRepository)
+                else -> uri(releaseRepository)
             }
 
             if (!smolderUsername.isNullOrBlank() && !smolderPassword.isNullOrBlank()) {

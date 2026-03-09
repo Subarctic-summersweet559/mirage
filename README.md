@@ -12,8 +12,7 @@ Repository:
 
 ```kotlin
 repositories {
-    maven("https://repo.smolder.fr/releases/")
-    maven("https://repo.smolder.fr/snapshots/")
+    maven("https://repo.smolder.fr/public/")
 }
 ```
 
@@ -73,6 +72,17 @@ Notes:
 - modern MOTD rendering is only served to clients at or above `minimum_modern_protocol`
 - rendered skin data is cached in SQLite
 
+### The Hat Trick
+
+Mirage packs two `8x8` tiles into one skin before upload:
+
+- tile A → head base layer (`8,8`)
+- tile B → head hat/overlay layer (`40,8`)
+- both tiles share one `tileHash` and one uploaded texture payload
+- each `TileSkin` uses `hat` to choose which layer is visible at render time
+
+Result: `2x` fewer MineSkin uploads (`1` upload for `2` tiles).
+
 ## Development
 
 Run tests:
@@ -107,3 +117,7 @@ Spigot uses standard command permissions via `plugin.yml`:
 ```java
 mirage.command.reload
 ```
+
+---
+
+*Note: Built with AI assistance — I wrote the spec, AI handled the implementation.*
